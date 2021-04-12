@@ -19,6 +19,10 @@ module.exports = {
       return res.sendStatus(403)
     }
 
+    if (err.name === 'JsonWebTokenError') {
+      return res.sendStatus(401)
+    }
+
     res.sendStatus(500)
   }
 }

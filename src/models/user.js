@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose')
 const bcrypt = require('bcrypt')
+const uniqueValidator = require('mongoose-unique-validator')
 
 const SALT_WORK_FACTOR = 10
 
@@ -40,6 +41,8 @@ UserSchema.pre('save', async function (next) {
 UserSchema.methods.comparePassword = async function (password) {
   return bcrypt.compare(password, this.password)
 }
+
+UserSchema.plugin(uniqueValidator)
 
 const User = model('User', UserSchema)
 
