@@ -1,5 +1,3 @@
-const ValidationError = require('mongoose').Error.ValidationError
-
 class NotFoundError extends Error {
   constructor (message) {
     super(message)
@@ -21,32 +19,16 @@ class PolicyError extends Error {
   }
 }
 
-function errorResponseCatcher (err, res) {
-  if (err instanceof ValidationError) {
-    res.status(422).send(err.message)
-    return true
+function wrapAsyncController (fn) {
+  return function (req, res, next) {
+    return fn(req, res, next).catch(err => {
+      next(err)
+    })
   }
-
-  if (err instanceof NotFoundError) {
-    res.sendStatus(404)
-    return true
-  }
-
-  if (err instanceof InvalidError) {
-    res.sendStatus(400)
-    return true
-  }
-
-  if (err instanceof PolicyError) {
-    res.sendStatus(403)
-    return true
-  }
-
-  return false
 }
 
 module.exports = {
-  errorResponseCatcher,
+  wrapAsyncController,
   NotFoundError,
   InvalidError,
   PolicyError
