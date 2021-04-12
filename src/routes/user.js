@@ -6,7 +6,7 @@ const UserService = require('../services/user')
 const router = Router()
 
 function isAdmin (requestedUser) {
-  return (userInDatabase) => {
+  return () => {
     if (requestedUser.role === 'admin') return true
     return false
   }

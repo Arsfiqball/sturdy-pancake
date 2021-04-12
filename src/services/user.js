@@ -23,9 +23,13 @@ module.exports = {
     }
   },
 
-  async find ({ page, perPage }) {
+  async find ({ page, perPage }, options) {
     page = Number(page || 1)
     perPage = Number(perPage || 10)
+
+    if (options && options.policy && !options.policy()) {
+      throw new PolicyError()
+    }
 
     const users = await User
       .find()
@@ -98,6 +102,10 @@ module.exports = {
 
     if (!user) {
       throw new NotFoundError()
+    }
+
+    if (options && options.policy && !options.policy(user)) {
+      throw new PolicyError()
     }
 
     const oldData = {
