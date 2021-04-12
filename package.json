@@ -1,0 +1,40 @@
+{
+  "name": "sejutacita-test-rest",
+  "version": "0.0.1",
+  "description": "Sejuta Cita REST API Technical Interview Test",
+  "main": "index.js",
+  "author": "Iqbal Mohammad Abdul Ghoni <iqballmags@gmail.com>",
+  "license": "SEE LICENSE IN LICENSE",
+  "private": true,
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.6",
+    "mongoose": "^5.12.3",
+    "swagger-jsdoc": "^7.0.0-rc.6",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "eslint": "^7.24.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^24.3.5",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
+    "supertest": "^6.1.3"
+  },
+  "scripts": {
+    "test": "jest",
+    "dev": "nodemon server.js"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}
