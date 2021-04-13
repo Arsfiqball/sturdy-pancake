@@ -4,7 +4,13 @@ const { NotFoundError, InvalidError, PolicyError } = require('../helpers')
 module.exports = {
   errorHandler (err, req, res, next) {
     if (err instanceof ValidationError) {
-      return res.status(422).send(err.message)
+      const errorObj = {}
+
+      Object.keys(err.errors).forEach(key => {
+        errorObj[key] = err.errors[key].properties
+      })
+
+      return res.status(422).send(errorObj)
     }
 
     if (err instanceof NotFoundError) {

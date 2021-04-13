@@ -1,0 +1,235 @@
+openapi: "3.0.0"
+info:
+  description: Uses express.js, mongodb, jest, and swagger
+  version: "0.0.1"
+  title: Sejuta Cita REST API Test
+servers:
+  - url: "http://localhost:1337"
+security: 
+  - Bearer: []
+paths:
+  /auth/login:
+    post:
+      summary: Authenticate by credentials
+      tags:
+        - auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: admin
+                password:
+                  type: string
+                  example: admin@123
+      responses:
+        '200':
+          description: Authentication succeed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'
+        '422':
+          description: Wrong credentials
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      type: string
+                      example: Username or password is wrong
+  /auth/refresh:
+    get:
+      summary: Get new fresh token
+      tags:
+        - auth
+      responses:
+        '200':
+          description: Authentication succeed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'
+  /users:
+    get:
+      summary: Retrieve a list of users
+      tags:
+        - user
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+        - in: query
+          name: per_page
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create new user
+      tags:
+        - user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InputUser'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: 6074644784485c1b88477f4a
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not found
+    put:
+      summary: Update user by ID
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: 6074644784485c1b88477f4a
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+        '404':
+          description: Not found
+    delete:
+      summary: Delete user by ID
+      tags:
+        - user
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            example: 6074644784485c1b88477f4a
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: Not found
+components:
+  securitySchemes:
+    Bearer:
+      type: http
+      description: JWT authorization header
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Auth:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
+          description: JSON Web Token for authentication
+          example: eyJhbGciOiJIUzI1NiIsInR5...
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          description: User UUID
+          example: '6074644784485c1b88477f4a'
+        username:
+          type: string
+          description: Username
+          example: someone
+        role:
+          type: string
+          enum: [user, admin]
+          description: User Role
+          example: user
+    InputUser:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username
+          example: someone
+        password:
+          type: string
+          description: Password
+          example: someone234
+        role:
+          type: string
+          enum: [user, admin]
+          description: User Role
+          example: user
+    ValidationError:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Error, expected `username` to be unique. Value: `someone`"
+          type:
+            type: string
+            example: unique
+          path:
+            type: string
+            example: username
+          value:
+            type: string
+            example: someone

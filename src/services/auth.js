@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const { User } = require('../models/user')
 
-const secretKey = process.env.SECRET_KEY || ('qwerty+' + Date.now())
+const secretKey = process.env.SECRET_KEY || 'fillthiswitharecommended32chars_'
 
 module.exports = {
   async attempt ({ username, password }) {
