@@ -3,8 +3,6 @@ info:
   description: Uses express.js, mongodb, jest, and swagger
   version: "0.0.1"
   title: Sejuta Cita REST API Test
-servers:
-  - url: "http://localhost:1337"
 security: 
   - Bearer: []
 paths:
@@ -110,6 +108,7 @@ paths:
         - user
       parameters:
         - in: path
+          required: true
           name: id
           schema:
             type: string
@@ -129,6 +128,7 @@ paths:
         - user
       parameters:
         - in: path
+          required: true
           name: id
           schema:
             type: string
@@ -154,6 +154,7 @@ paths:
         - user
       parameters:
         - in: path
+          required: true
           name: id
           schema:
             type: string

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sturdy-pancake
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sturdy-pancake
+  template:
+    metadata:
+      labels:
+        app: sturdy-pancake
+    spec:
+      containers:
+        - name: sturdy-pancake
+          image: arsfiqball/sturdy-pancake:latest
+          ports:
+            - containerPort: 1337
+          env:
+            - name: MONGO_URL
+              value: "mongodb://mongo:27017/sturdy-pancake"
+            - name: HOST
+              value: "0.0.0.0"
+            - name: PORT
+              value: "1337"
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: secret-key
+          imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sturdy-pancake
+spec:
+  selector:
+    app: sturdy-pancake
+  ports:
+    - port: 80
+      targetPort: 1337
+  type: LoadBalancer

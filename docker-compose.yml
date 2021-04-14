@@ -1,0 +1,20 @@
+version: "3"
+services:
+  app:
+    container_name: app
+    restart: always
+    image: arsfiqball/sturdy-pancake:latest # using published image
+    ports:
+      - "1337:1337" # change to 80:1337 if you did not intend to use reverse proxy
+    environment:
+      - HOST=0.0.0.0
+      - PORT=1337
+      - MONGO_URL=mongodb://mongo:27017/sturdy-pancake
+      - SECRET_KEY
+    links:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo:4
+    volumes:
+      - ./data:/data/db
